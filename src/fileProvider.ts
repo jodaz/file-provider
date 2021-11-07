@@ -1,5 +1,6 @@
 import axios from 'axios'
 import interceptors from './interceptors'
+import { formDataHandler } from './formDataHandler'
 import { getUrl } from './helpers'
 
 export const fileProvider: any = ({ apiUrl, tokenName }: IProps) => {
@@ -11,7 +12,7 @@ export const fileProvider: any = ({ apiUrl, tokenName }: IProps) => {
 
     return ({
         get: async (resource: string, params: any) => {
-            const url = `${resource}/${getUrl(params)}`;
+            const url = `${resource}?${getUrl(params)}`;
             const res = await client.get(url, { responseType: 'blob' });
 
             return res;

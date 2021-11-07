@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { fileProvider } from './fileProvider'
 import fileDownload from 'js-file-download'
 import isEmpty from 'is-empty';
 
@@ -10,33 +9,31 @@ const initialState = {
     error: {}
 }
 
-const downloableInitialState = {
-    status: false,
-    name: '',
-    ext: ''
-}
-
-export const useFileProvider = () => {
+export const useFileProvider = (FileProvider: any) => {
     const [state, setState] = React.useState<State>(initialState)
-    const [downloable, setDownloable] = React.useState(downloableInitialState)
 
-    const provider = React.useCallback(async ({ type, resource, payload }: ProviderProps) => {
-        setState({ ...state, loading: true })
-
+    const fileProvider = React.useCallback(async ({ type, resource, payload }: ProviderProps) => {
         let res: any = {}
+        setState({ ...initialState, loading: true })
 
         try {
             switch (type) {
                 case 'get':
-                    res = await fileProvider.get(resource, payload)
+                    const { name, ext } = payload
+                    res = await FileProvider.get(resource, payload)
 
                     if (!isEmpty(res.data)) {
-                        setDownloable({ status: true, name: payload.name, ext: 'pdf' })
+                        await fileDownload(res.data, `${name}.${ext}`)
                     }
+                    break;
                 case 'create':
-                    res = await fileProvider.post(resource, payload)
+                    res = await FileProvider.post(resource, payload)
+                    break;
                 case 'update':
-                    res = await fileProvider.put(resource, payload)
+                    res = await FileProvider.put(resource, payload)
+                    break;
+                default:
+                    throw Error("Undefined type")
             }
         } catch (error) {
             setState({
@@ -45,16 +42,10 @@ export const useFileProvider = () => {
             })
         }
 
-        setState({ ...state, data: res.data, loaded: true, loading: false })
-    }, [])
+        setState({ ...state, data: res.data, loading: false })
+    }, [setState, FileProvider])
 
-    React.useCallback(() => {
-        if (downloable.status) {
-            return fileDownload(state.data, downloable.name)
-        }
-    }, [downloable.status])
-
-    return [provider, state] as const;
+    return [fileProvider, state] as const;
 }
 
 interface ProviderProps {

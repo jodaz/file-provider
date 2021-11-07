@@ -1,5 +1,5 @@
 
-const formDataHandler = (data: any) => {
+export const formDataHandler = (data: any) => {
     const formData = new FormData();
     const { file, ...rest } = data;
 

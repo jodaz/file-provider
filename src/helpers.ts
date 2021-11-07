@@ -1,11 +1,10 @@
 import { stringify } from 'qs';
 
-export const getUrl = (props: any) => {
-    const { basePath, page, perPage, filterValues } = props;
+export const getUrl = ({ page, perPage, filterValues, ext }: IgetUrl) => {
     const query = {
         page: page,
         perPage: perPage,
-        type: 'pdf'
+        type: ext
     }
 
     // Add all filter params to query.
@@ -14,5 +13,12 @@ export const getUrl = (props: any) => {
         query[`filter[${key}]`] = filterValues[key];
     });
 
-    return `${basePath.substring(1)}?${stringify(query)}`;
+    return stringify(query);
+}
+
+interface IgetUrl {
+    page: number | string;
+    perPage: number | string;
+    filterValues: any;
+    ext: string;
 }
