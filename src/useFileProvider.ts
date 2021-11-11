@@ -18,7 +18,8 @@ export const useFileProvider = (FileProvider: any) => {
 
         try {
             switch (type) {
-                case 'get':
+                case 'list':
+                case 'getOne':
                     const { name, ext } = payload
                     res = await FileProvider.get(resource, payload)
 
