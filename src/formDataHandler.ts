@@ -8,6 +8,9 @@ export const formDataHandler = (data: any) => {
     }
 
     for (let [key, value] of Object.entries(rest)) {
+        if (typeof value == 'object') {
+            value = JSON.stringify(value)
+        }
         //@ts-expect-error
         formData.append(key, value);
     };
