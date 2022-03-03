@@ -19,9 +19,16 @@ export const useFileProvider = (FileProvider: any) => {
         try {
             switch (type) {
                 case 'list':
+                    var { name, ext } = payload
+                    res = await FileProvider.get(resource, payload) 
+
+                    if (!isEmpty(res.data)) {
+                        await fileDownload(res.data, `${name}.${ext}`)
+                    }
+                    break;
                 case 'getOne':
-                    const { name, ext } = payload
-                    res = await FileProvider.get(resource, payload)
+                    var { name, ext, record } = payload
+		    res = await FileProvider.getOne(resource, record)
 
                     if (!isEmpty(res.data)) {
                         await fileDownload(res.data, `${name}.${ext}`)

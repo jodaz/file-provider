@@ -18,7 +18,7 @@ export const fileProvider: any = ({ apiUrl, tokenName }: IProps) => {
             return res;
         },
         getOne: async (resource: string, params: any) => {
-            const url = `${resource}/${params.id}}`;
+            const url = `${resource}/${params}`;
             const res = await client.get(url, { responseType: 'blob' });
 
             return res;
@@ -26,22 +26,15 @@ export const fileProvider: any = ({ apiUrl, tokenName }: IProps) => {
         post: async (resource: string, params: any) => {
             const formData = await formDataHandler(params);
             const res = await client.post(resource, formData);
-            const { id, attributes  } = res.data;
 
-            return {
-                data: {
-                    id, ...attributes
-                }
-            }
+            return res 
         },
         put: async (resource: string, params: any) => {
             const { id, data } = params
             const formData = await formDataHandler(data);
             const res = await client.put(`${resource}/${id}`, formData);
 
-            return {
-                data: res.data
-            }
+            return res 
         }
     })
 }
