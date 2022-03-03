@@ -1,6 +1,6 @@
 {
   "name": "@jodaz_/file-provider",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "React hook for file uploading and downloading",
   "module": "./lib/esm/index.js",
   "types": "./lib/esm/index.d.ts",
